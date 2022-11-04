@@ -53,6 +53,7 @@ type
     onFrame*: Callback
     onMove*: Callback
     onResize*: Callback
+    onResizing*: Callback
     onFocusChange*: Callback
     onMouseMove*: Callback
     onScroll*: Callback
@@ -794,11 +795,13 @@ proc wndProc(
     if window.onMove != nil:
       window.onMove()
     return 0
-  of WM_SIZE, WM_SIZING:
+  of WM_SIZE:
     if window.onResize != nil:
       window.onResize()
-    if window.onFrame != nil:
-      window.onFrame()
+    return 0
+  of WM_SIZING:
+    if window.onResizing != nil:
+      window.onResizing()
     return 0
   of WM_SETFOCUS, WM_KILLFOCUS:
     if window.onFocusChange != nil:
